@@ -6,7 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
-
+//Estoy conectado
 namespace Ensamblador
 {
     public class Lenguaje : Sintaxis
