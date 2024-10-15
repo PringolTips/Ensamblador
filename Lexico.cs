@@ -9,7 +9,7 @@ namespace Ensamblador
     public class Lexico : Token, IDisposable
     {
         protected StreamReader archivo;
-        public StreamWriter log;
+        public StreamWriter log, asm;
         protected int linea, caracter;
         const int F = -1;
         const int E = -2;
@@ -55,6 +55,7 @@ namespace Ensamblador
         {
             linea = caracter = 1;
             log = new StreamWriter(Path.GetFileNameWithoutExtension(nombre) + ".log");
+            asm = new StreamWriter(Path.GetFileNameWithoutExtension(nombre) + ".asm");
             log.AutoFlush = true;
             log.WriteLine("Analizador Lexico");
             log.WriteLine("Autores: \nVega Angeles Christopher");
