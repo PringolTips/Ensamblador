@@ -1,0 +1,15 @@
+C:\Lenguajes y Automatas\Ensamblador\bin\Debug\net8.0\Ensamblador.exe
+C:\Lenguajes y Automatas\Ensamblador\bin\Debug\net8.0\Ensamblador.deps.json
+C:\Lenguajes y Automatas\Ensamblador\bin\Debug\net8.0\Ensamblador.runtimeconfig.json
+C:\Lenguajes y Automatas\Ensamblador\bin\Debug\net8.0\Ensamblador.dll
+C:\Lenguajes y Automatas\Ensamblador\bin\Debug\net8.0\Ensamblador.pdb
+C:\Lenguajes y Automatas\Ensamblador\obj\Debug\net8.0\Ensamblador.GeneratedMSBuildEditorConfig.editorconfig
+C:\Lenguajes y Automatas\Ensamblador\obj\Debug\net8.0\Ensamblador.AssemblyInfoInputs.cache
+C:\Lenguajes y Automatas\Ensamblador\obj\Debug\net8.0\Ensamblador.AssemblyInfo.cs
+C:\Lenguajes y Automatas\Ensamblador\obj\Debug\net8.0\Ensamblador.csproj.CoreCompileInputs.cache
+C:\Lenguajes y Automatas\Ensamblador\obj\Debug\net8.0\Ensamblador.sourcelink.json
+C:\Lenguajes y Automatas\Ensamblador\obj\Debug\net8.0\Ensamblador.dll
+C:\Lenguajes y Automatas\Ensamblador\obj\Debug\net8.0\refint\Ensamblador.dll
+C:\Lenguajes y Automatas\Ensamblador\obj\Debug\net8.0\Ensamblador.pdb
+C:\Lenguajes y Automatas\Ensamblador\obj\Debug\net8.0\Ensamblador.genruntimeconfig.cache
+C:\Lenguajes y Automatas\Ensamblador\obj\Debug\net8.0\ref\Ensamblador.dll

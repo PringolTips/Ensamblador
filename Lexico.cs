@@ -75,6 +75,7 @@ namespace Ensamblador
         public void Dispose() // Destructor
         {
             archivo.Close();
+            asm.Close();
             log.Close();
         }
         int Columna(char c)

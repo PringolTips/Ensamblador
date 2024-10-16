@@ -1,0 +1,54 @@
+Analizador Lexico
+Autores: 
+Vega Angeles Christopher
+Moya Arreola Cristian
+Martinez Prieto Angel Josue
+Fecha:16/10/2024 09:57:03 a. m.
+using = Identificador
+Analisis Sintactico
+System = Identificador
+; = FinSentencia
+using = Identificador
+System = Identificador
+. = Caracter
+Collections = Identificador
+. = Caracter
+Generic = Identificador
+; = FinSentencia
+using = Identificador
+System = Identificador
+. = Caracter
+Linq = Identificador
+; = FinSentencia
+using = Identificador
+System = Identificador
+. = Caracter
+Threading = Identificador
+. = Caracter
+Tasks = Identificador
+; = FinSentencia
+static = Identificador
+void = Identificador
+Main = Identificador
+( = Caracter
+string = Identificador
+[ = Caracter
+] = Caracter
+args = Identificador
+) = Caracter
+{ = Inicio
+int = TipoDato
+i = Identificador
+; = FinSentencia
+float = TipoDato
+y = Identificador
+; = FinSentencia
+char = TipoDato
+z = Identificador
+; = FinSentencia
+} = Fin
+￿ = Caracter
+Lista de variables
+i (Int) = 0
+y (Float) = 0
+z (Char) = 0

@@ -18,6 +18,7 @@ namespace Ensamblador
         public Lenguaje(String nombre = "prueba.cpp")
         {
             log.WriteLine("Analisis Sintactico");
+            asm.WriteLine("Analisis Sintactico");
             listaVariables = new List<Variable>();
             S = new Stack<float>();
         }
@@ -33,8 +34,24 @@ namespace Ensamblador
         }
         private void imprimeVariables()
         {
-            string Imprimirvars = String.Join("\n", listaVariables.Select(v => $"{v.nombre} ({v.tipo}) = {v.valor}"));
-            log.WriteLine(Imprimirvars);
+            log.WriteLine("Lista de variables");
+            asm.WriteLine("\nsegment .data");
+            foreach (Variable v in listaVariables)
+            {
+                log.WriteLine(v.nombre + " (" + v.tipo + ") = " + v.valor);
+                if (v.tipo == Variable.TipoD.Char)
+                {
+					asm.WriteLine("\t" + v.nombre + " db 0");
+				}
+                else if (v.tipo == Variable.TipoD.Int)
+                {
+					asm.WriteLine("\t" + v.nombre + " dd 0");
+				}
+				else
+                {
+					asm.WriteLine("\t" + v.nombre + " dq 0 ");
+				}
+            }
         }
         //Programa  -> Librerias? Variables? Main
         public void Programa()
@@ -91,11 +108,13 @@ namespace Ensamblador
                 match("=");
                 Expresion();
                 float valor = S.Pop();
+                asm.WriteLine("\tpop");
 
                 if (AnalisisSemantico(variable, valor))
                 {
                     variable.valor = valor;
                     S.Push(valor);
+                    asm.WriteLine("\tpush");
                     log.WriteLine(variable.nombre + " = " + valor);
                 }
                 else
@@ -173,6 +192,7 @@ namespace Ensamblador
         {
             String variable = Contenido;
             match(Tipos.Identificador);
+            asm.WriteLine("; Asignacion a " + variable);
             if (!ExisteVariable(variable))
             {
                 throw new Error("Semantico: La variable " + variable + " no ha sido declarada. ", log, linea);
@@ -197,30 +217,35 @@ namespace Ensamblador
                 match("+=");
                 Expresion();
                 nuevoValor += S.Pop();
+                asm.WriteLine("\tpop ax");
             }
             else if (Contenido == "-=")
             {
                 match("-=");
                 Expresion();
                 nuevoValor -= S.Pop();
+                asm.WriteLine("\tpop ax");
             }
             else if (Contenido == "*=")
             {
                 match("*=");
                 Expresion();
                 nuevoValor *= S.Pop();
+                asm.WriteLine("\tpop ax");
             }
             else if (Contenido == "/=")
             {
                 match("/=");
                 Expresion();
                 nuevoValor /= S.Pop();
+                asm.WriteLine("\tpop ax");
             }
             else if (Contenido == "%=")
             {
                 match("%=");
                 Expresion();
                 nuevoValor %= S.Pop();
+                asm.WriteLine("\tpop ax");
             }
             else if (Contenido == "=")
             {
@@ -247,12 +272,14 @@ namespace Ensamblador
                 {
                     Expresion();
                     nuevoValor = S.Pop();
+                    asm.WriteLine("\tpop ax");
                 }
             }
             if (AnalisisSemantico(v, nuevoValor))
             {
                 v.valor = nuevoValor;
                 S.Push(nuevoValor);
+                asm.WriteLine("\tpush");
             }
             else
             {
@@ -260,6 +287,7 @@ namespace Ensamblador
                                 " a un " + v.tipo, log, linea);
             }
             //log.WriteLine(variable + " = " + nuevoValor);
+            asm.WriteLine("; Termina asignacion a " + variable);
         }
         private Variable.TipoD valorToTipo(float valor)
         {
@@ -343,7 +371,10 @@ namespace Ensamblador
             match(Tipos.OpRelacional);
             Expresion();
             float R2 = S.Pop();
+            asm.WriteLine("\tpop ax");
             float R1 = S.Pop();
+            asm.WriteLine("\tpop bx");
+            asm.WriteLine("cmp ax, bx");
             switch (operador)
             {
                 case ">": return R1 > R2;
@@ -502,9 +533,28 @@ namespace Ensamblador
             }
             return resultado;
         }
+        private void asm_Main()
+        {
+            asm.WriteLine();
+			asm.WriteLine("extern fflush");
+			asm.WriteLine("extern printf");
+			asm.WriteLine("extern scanf");
+			asm.WriteLine("extern stdout");
+			asm.WriteLine("\nsegment .text");
+			asm.WriteLine("\tglobal _main");
+			asm.WriteLine("\n_main:");
+		}
+		private void asm_endMain()
+        {
+			asm.WriteLine("\tadd esp, 4\n");
+			asm.WriteLine("\tmov eax, 1");
+			asm.WriteLine("\txor ebx, ebx");
+			asm.WriteLine("\tint 0x80");
+		}
         //Main      -> static void Main(string[] args) BloqueInstrucciones 
         private void Main()
         {
+            asm_Main();
             match("static");
             match("void");
             match("Main");
@@ -515,6 +565,7 @@ namespace Ensamblador
             match("args");
             match(")");
             BloqueInstrucciones();
+            asm_endMain();
         }
         //Expresion -> Termino MasTermino
         private void Expresion()
@@ -531,15 +582,19 @@ namespace Ensamblador
                 match(Tipos.OpTermino);
                 Termino();
                 float R2 = S.Pop();
+                asm.WriteLine("\tpop ax");
                 float R1 = S.Pop();
+                asm.WriteLine("\tpop bx");
                 switch (operador)
                 {
                     case "+":
                         tipoDatoExpresion = valorToTipo(R1 + R2);
-                        S.Push(R1 + R2); break;
+                        S.Push(R1 + R2); 
+                        asm.WriteLine("\tpush"); break;
                     case "-":
                         tipoDatoExpresion = valorToTipo(R1 - R2);
-                        S.Push(R1 - R2); break;
+                        S.Push(R1 - R2); 
+                        asm.WriteLine("\tpush"); break;
                 }
             }
         }
@@ -558,18 +613,23 @@ namespace Ensamblador
                 match(Tipos.OpFactor);
                 Factor();
                 float R2 = S.Pop();
+                asm.WriteLine("\tpop ax");
                 float R1 = S.Pop();
+                asm.WriteLine("\tpop bx");
                 switch (operador)
                 {
                     case "*":
                         tipoDatoExpresion = valorToTipo(R1 * R2);
-                        S.Push(R1 * R2); break;
+                        S.Push(R1 * R2); 
+                        asm.WriteLine("\tpush"); break;
                     case "/":
                         tipoDatoExpresion = valorToTipo(R1 / R2);
-                        S.Push(R1 / R2); break;
+                        S.Push(R1 / R2); 
+                        asm.WriteLine("\tpush"); break;
                     case "%":
                         tipoDatoExpresion = valorToTipo(R1 % R2);
-                        S.Push(R1 % R2); break;
+                        S.Push(R1 % R2); 
+                        asm.WriteLine("\tpush dx");break;
                 }
             }
         }
@@ -579,6 +639,8 @@ namespace Ensamblador
             if (Clasificacion == Tipos.Numero)
             {
                 S.Push(float.Parse(Contenido));
+                asm.WriteLine("\tmov ax, " + Contenido);
+                asm.WriteLine("\tpush ax");
                 if (tipoDatoExpresion < valorToTipo(float.Parse(Contenido)))
                 {
                     tipoDatoExpresion = valorToTipo(float.Parse(Contenido));
@@ -593,6 +655,7 @@ namespace Ensamblador
                 }
                 var v = listaVariables.Find(delegate (Variable x) { return x.nombre == Contenido; });
                 S.Push(v.valor);
+                asm.WriteLine("\tmov ax, " + Contenido );
                 if (tipoDatoExpresion < v.tipo)
                 {
                     tipoDatoExpresion = v.tipo;
@@ -618,6 +681,7 @@ namespace Ensamblador
                 {
                     tipoDatoExpresion = aCastear;
                     float valor = S.Pop();
+                    asm.WriteLine("\tpop ax");
                     if (aCastear == Variable.TipoD.Char)
                     {
                         valor %= 256;
@@ -627,6 +691,8 @@ namespace Ensamblador
                         valor %= 65536;
                     }
                     S.Push(valor);
+                    asm.WriteLine("\tmov ax ," + valor  );
+                    asm.WriteLine("\tpush dx");
                 }
             }
         }
