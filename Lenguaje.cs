@@ -639,7 +639,7 @@ namespace Ensamblador
             if (Clasificacion == Tipos.Numero)
             {
                 S.Push(float.Parse(Contenido));
-                asm.WriteLine("\tmov ax, " + Contenido);
+                asm.WriteLine("\tmov " + Contenido + ", ax");
                 asm.WriteLine("\tpush ax");
                 if (tipoDatoExpresion < valorToTipo(float.Parse(Contenido)))
                 {
@@ -655,7 +655,7 @@ namespace Ensamblador
                 }
                 var v = listaVariables.Find(delegate (Variable x) { return x.nombre == Contenido; });
                 S.Push(v.valor);
-                asm.WriteLine("\tmov ax, " + Contenido );
+                asm.WriteLine("\tmov " + Contenido + ", ax");
                 if (tipoDatoExpresion < v.tipo)
                 {
                     tipoDatoExpresion = v.tipo;
@@ -691,7 +691,7 @@ namespace Ensamblador
                         valor %= 65536;
                     }
                     S.Push(valor);
-                    asm.WriteLine("\tmov ax ," + valor  );
+                    asm.WriteLine("\tmov " + valor + ", ax");
                     asm.WriteLine("\tpush dx");
                 }
             }

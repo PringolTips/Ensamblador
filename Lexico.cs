@@ -10,7 +10,7 @@ namespace Ensamblador
     {
         protected StreamReader archivo;
         public StreamWriter log, asm;
-        protected int linea, caracter;
+        protected int linea;
         const int F = -1;
         const int E = -2;
         int[,] TRAND =
@@ -51,9 +51,9 @@ namespace Ensamblador
         /*32*/{ F, F,32, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F, F},
              //WS, L, D, ., E, +, -, ;, =, *, /, %, &, |, !, <, >, ?, ", {, },EOF,Ld,\n, $
         };
-        public Lexico(string nombre = "prueba.cpp") // Constructor
+public Lexico(string nombre = "prueba.cpp") // Constructor
         {
-            linea = caracter = 1;
+            linea = 1;
             log = new StreamWriter(Path.GetFileNameWithoutExtension(nombre) + ".log");
             asm = new StreamWriter(Path.GetFileNameWithoutExtension(nombre) + ".asm");
             log.AutoFlush = true;
@@ -62,6 +62,11 @@ namespace Ensamblador
             log.WriteLine("Moya Arreola Cristian");
             log.WriteLine("Martinez Prieto Angel Josue");
             log.WriteLine("Fecha:" + DateTime.Now);
+
+            asm.WriteLine(";Analizador Lexico");
+            asm.WriteLine(";Autores: \nVega Angeles Christopher");
+            asm.WriteLine(";Moya Arreola Cristian");
+            asm.WriteLine(";Martinez Prieto Angel Josue");
             if (Path.GetExtension(nombre) != ".cpp")
             {
                 throw new Error("El archivo " + nombre + " no tiene extension CPP", log);
@@ -232,7 +237,6 @@ namespace Ensamblador
                     {
                         linea++;
                     }
-                    caracter++;
                     archivo.Read();
                 }
             }
