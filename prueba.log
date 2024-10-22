@@ -1,33 +1,10 @@
 Analizador Lexico
 Autores: 
-Vega Angeles Christopher
 Moya Arreola Cristian
 Martinez Prieto Angel Josue
-Fecha:16/10/2024 09:57:03 a. m.
-using = Identificador
-Analisis Sintactico
-System = Identificador
-; = FinSentencia
-using = Identificador
-System = Identificador
-. = Caracter
-Collections = Identificador
-. = Caracter
-Generic = Identificador
-; = FinSentencia
-using = Identificador
-System = Identificador
-. = Caracter
-Linq = Identificador
-; = FinSentencia
-using = Identificador
-System = Identificador
-. = Caracter
-Threading = Identificador
-. = Caracter
-Tasks = Identificador
-; = FinSentencia
+Fecha:22/10/2024 09:44:50 a. m.
 static = Identificador
+Analisis Sintactico
 void = Identificador
 Main = Identificador
 ( = Caracter
@@ -38,17 +15,72 @@ args = Identificador
 ) = Caracter
 { = Inicio
 int = TipoDato
-i = Identificador
-; = FinSentencia
-float = TipoDato
+x = Identificador
+, = Caracter
 y = Identificador
 ; = FinSentencia
-char = TipoDato
-z = Identificador
+x = Identificador
+= = Asignacion
+( = Caracter
+3 = Numero
++ = OpTermino
+5 = Numero
+) = Caracter
+* = OpFactor
+8 = Numero
+- = OpTermino
+( = Caracter
+10 = Numero
+- = OpTermino
+4 = Numero
+) = Caracter
+/ = OpFactor
+2 = Numero
 ; = FinSentencia
+x = Identificador
+++ = IncTermino
+; = FinSentencia
+if = Condicion
+( = Caracter
+x = Identificador
+== = OpRelacional
+62 = Numero
+) = Caracter
+{ = Inicio
+x = Identificador
+= = Asignacion
+0 = Numero
+; = FinSentencia
+if = Condicion
+( = Caracter
+x = Identificador
+!= = OpRelacional
+0 = Numero
+) = Caracter
+{ = Inicio
+x = Identificador
+= = Asignacion
+1 = Numero
+; = FinSentencia
+} = Fin
+} = Fin
+x = Identificador
+= = Asignacion
+0 = Numero
+; = FinSentencia
+while = Ciclo
+( = Caracter
+x = Identificador
+!= = OpRelacional
+10 = Numero
+) = Caracter
+{ = Inicio
+x = Identificador
+++ = IncTermino
+; = FinSentencia
+} = Fin
 } = Fin
 ￿ = Caracter
 Lista de variables
-i (Int) = 0
-y (Float) = 0
-z (Char) = 0
+x (Int) = 2
+y (Int) = 0

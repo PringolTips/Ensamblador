@@ -58,13 +58,14 @@ public Lexico(string nombre = "prueba.cpp") // Constructor
             asm = new StreamWriter(Path.GetFileNameWithoutExtension(nombre) + ".asm");
             log.AutoFlush = true;
             log.WriteLine("Analizador Lexico");
-            log.WriteLine("Autores: \nVega Angeles Christopher");
+            log.WriteLine("Autores: ");
             log.WriteLine("Moya Arreola Cristian");
             log.WriteLine("Martinez Prieto Angel Josue");
             log.WriteLine("Fecha:" + DateTime.Now);
 
             asm.WriteLine(";Analizador Lexico");
-            asm.WriteLine(";Autores: \nVega Angeles Christopher");
+            asm.WriteLine(";Autores:");
+            asm.WriteLine(";Vega Angeles Christopher");
             asm.WriteLine(";Moya Arreola Cristian");
             asm.WriteLine(";Martinez Prieto Angel Josue");
             if (Path.GetExtension(nombre) != ".cpp")
