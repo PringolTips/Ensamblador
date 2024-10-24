@@ -20,8 +20,9 @@ namespace Ensamblador
     public class Lenguaje : Sintaxis
     {
         private List<Variable> listaVariables;
+        private List<Mensaje> msg;
 
-        private int contIf, contDo, cWhiles;
+        private int contIf, contDo, cWhiles, cCadena;
        // private Variable.TipoD tipoDatoExpresion;
 
         public Lenguaje(String nombre = "prueba.cpp")
@@ -29,6 +30,7 @@ namespace Ensamblador
             log.WriteLine("Analisis Sintactico");
             asm.WriteLine(";Analisis Sintactico");
             listaVariables = new List<Variable>();
+            msg = new List<Mensaje>();
             contIf = contDo = 1;
         }
         Variable.TipoD getTipo(String TipoDato)
@@ -60,6 +62,11 @@ namespace Ensamblador
                 {
                     asm.WriteLine("\t" + v.nombre + " dw 0 ");
                 }
+            }
+            foreach (Mensaje v in msg)
+            {
+               
+                    asm.WriteLine("\t" + v.nombre+ " db '" + v.Contenido + "' ,0");
             }
         }
         //Programa  -> Librerias? Variables? Main
@@ -396,11 +403,14 @@ namespace Ensamblador
         //           Console.(Read | ReadLine) ();
         private void console()
         {
+            string tem = "";
+            char comillas = '"';
             match("Console");
             match(".");
             if (Contenido == "WriteLine")
             {
                 match("WriteLine");
+                asm.Write("\tPRINT_STRING ");
             }
             else
             {
@@ -409,7 +419,9 @@ namespace Ensamblador
             match("(");
             if (Clasificacion == Tipos.Cadena)
             {
+                tem = Contenido;
                 match(Tipos.Cadena);
+                
 
                 if (Contenido == "+")
                 {
@@ -424,6 +436,11 @@ namespace Ensamblador
                         listaConcatenacion();
                     }
                 }
+                asm.WriteLine("msg" + cCadena);
+
+                tem = tem.Replace('"',comillas);
+                msg.Add(new Mensaje(tem,"msg" + cCadena));
+                cCadena++;
             }
             else
             {
@@ -467,21 +484,19 @@ namespace Ensamblador
         }
         private void asm_Main()
         {
-            asm.WriteLine();
-            asm.WriteLine("extern fflush");
-            asm.WriteLine("extern printf");
-            asm.WriteLine("extern scanf");
-            asm.WriteLine("extern stdout");
+            asm.WriteLine("%include 'io.inc'");
             asm.WriteLine("\nsegment .text");
-            asm.WriteLine("\tglobal _main");
-            asm.WriteLine("\n_main:");
+            asm.WriteLine("\tglobal main");
+            asm.WriteLine("\nmain:");
         }
         private void asm_endMain()
         {
-            asm.WriteLine("\tadd esp, 4\n");
-            asm.WriteLine("\tmov eax, 1");
-            asm.WriteLine("\txor ebx, ebx");
-            asm.WriteLine("\tint 0x80");
+            //asm.WriteLine("\tadd esp, 4\n");
+            //asm.WriteLine("\tmov eax, 1");
+            //asm.WriteLine("\txor ebx, ebx");
+            //asm.WriteLine("\tint 0x80");
+            asm.WriteLine("\txor eax, eax");
+            asm.WriteLine("\t ret");
         }
         //Main      -> static void Main(string[] args) BloqueInstrucciones 
         private void Main()

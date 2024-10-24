@@ -2,7 +2,7 @@ Analizador Lexico
 Autores: 
 Moya Arreola Cristian
 Martinez Prieto Angel Josue
-Fecha:22/10/2024 09:44:50 a. m.
+Fecha:24/10/2024 09:57:52 a. m.
 static = Identificador
 Analisis Sintactico
 void = Identificador
@@ -14,73 +14,27 @@ string = Identificador
 args = Identificador
 ) = Caracter
 { = Inicio
-int = TipoDato
-x = Identificador
-, = Caracter
-y = Identificador
-; = FinSentencia
-x = Identificador
-= = Asignacion
+Console = Identificador
+. = Caracter
+WriteLine = Identificador
 ( = Caracter
-3 = Numero
-+ = OpTermino
-5 = Numero
+"Hola mundo" = Cadena
 ) = Caracter
-* = OpFactor
-8 = Numero
-- = OpTermino
+; = FinSentencia
+Console = Identificador
+. = Caracter
+WriteLine = Identificador
 ( = Caracter
-10 = Numero
-- = OpTermino
-4 = Numero
+"Hola mundo" = Cadena
 ) = Caracter
-/ = OpFactor
-2 = Numero
 ; = FinSentencia
-x = Identificador
-++ = IncTermino
-; = FinSentencia
-if = Condicion
+Console = Identificador
+. = Caracter
+WriteLine = Identificador
 ( = Caracter
-x = Identificador
-== = OpRelacional
-62 = Numero
+"Hola mundo" = Cadena
 ) = Caracter
-{ = Inicio
-x = Identificador
-= = Asignacion
-0 = Numero
 ; = FinSentencia
-if = Condicion
-( = Caracter
-x = Identificador
-!= = OpRelacional
-0 = Numero
-) = Caracter
-{ = Inicio
-x = Identificador
-= = Asignacion
-1 = Numero
-; = FinSentencia
-} = Fin
-} = Fin
-x = Identificador
-= = Asignacion
-0 = Numero
-; = FinSentencia
-while = Ciclo
-( = Caracter
-x = Identificador
-!= = OpRelacional
-10 = Numero
-) = Caracter
-{ = Inicio
-x = Identificador
-++ = IncTermino
-; = FinSentencia
-} = Fin
 } = Fin
 ￿ = Caracter
 Lista de variables
-x (Int) = 2
-y (Int) = 0
