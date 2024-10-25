@@ -1,6 +1,8 @@
 static void Main(string[] args)
 {   
-    Console.WriteLine("Hola mundo");
-    Console.WriteLine("Hola mundo");
-    Console.WriteLine("Hola mundo");
+    int i = 6;
+    i = 7 + 4;
+
+    Console.WriteLine("Hola" + " " + i + "Console" + i);
+
 }

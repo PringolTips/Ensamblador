@@ -10,13 +10,26 @@ segment .text
 	global main
 
 main:
+	mov eax, 6
+	push eax
+	pop eax
+	mov dword [i], eax
+;Asignacion a i
+	mov eax, 7
+	push eax
+	mov eax, 4
+	push eax
+	pop ebx
+	pop eax
+	add eax, ebx
+	push eax
+	pop eax
+	mov dword [i], eax
+; Termina asignacion a i
 	PRINT_STRING msg0
-	PRINT_STRING msg1
-	PRINT_STRING msg2
 	xor eax, eax
-	 ret
+	ret
 
 segment .data
-	msg0 db '"Hola mundo"' ,0
-	msg1 db '"Hola mundo"' ,0
-	msg2 db '"Hola mundo"' ,0
+	i dd 0
+	msg0 db 'Hola',10 ,0

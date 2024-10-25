@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Formats.Asn1;
 using System.IO.Pipes;
 using System.Linq;
@@ -7,12 +8,12 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 /*
     El proyecto genera código ASM en: nasm o masm o .... excepto emu8086
-    1. Completar la asignación
-    2. Console.Write & Console.WriteLine
-    3. Console.Read & Console.ReadLine
-    4. Considerar el else en el if 
-    5. Programar el while 
-    6. Programar el for
+    1. Completar la asignación                                              -listo
+    2. Console.Write & Console.WriteLine                                    -concatenacion
+    3. Console.Read & Console.ReadLine /*                                   -pendiente    
+    4. Considerar el else en el if --  
+    5. Programar el while /*
+    6. Programar el for--
 */
 //Estoy conectado
 namespace Ensamblador
@@ -23,7 +24,7 @@ namespace Ensamblador
         private List<Mensaje> msg;
 
         private int contIf, contDo, cWhiles, cCadena;
-       // private Variable.TipoD tipoDatoExpresion;
+        // private Variable.TipoD tipoDatoExpresion;
 
         public Lenguaje(String nombre = "prueba.cpp")
         {
@@ -65,8 +66,10 @@ namespace Ensamblador
             }
             foreach (Mensaje v in msg)
             {
-               
-                    asm.WriteLine("\t" + v.nombre+ " db '" + v.Contenido + "' ,0");
+                if (v.Salto == true)
+                    asm.WriteLine("\t" + v.nombre + " db '" + v.Contenido + "',10 ,0");
+                else
+                    asm.WriteLine("\t" + v.nombre + " db '" + v.Contenido + "' ,0");
             }
         }
         //Programa  -> Librerias? Variables? Main
@@ -112,12 +115,15 @@ namespace Ensamblador
         private void ListaIdentificadores(Variable.TipoD t)
         {
             listaVariables.Add(new Variable(Contenido, t));
+            string variable = Contenido;
             match(Tipos.Identificador);
 
             if (Contenido == "=")
             {
                 match("=");
                 Expresion();
+                asm.WriteLine("\tpop eax");
+                asm.WriteLine("\tmov dword [" + variable + "], eax");
             }
             if (Contenido == ",")
             {
@@ -210,30 +216,52 @@ namespace Ensamblador
                 match("+=");
                 Expresion();
                 asm.WriteLine("\tpop eax");
+                asm.WriteLine("\tadd [" + variable + "], eax");
+
+
             }
             else if (Contenido == "-=")
             {
                 match("-=");
                 Expresion();
                 asm.WriteLine("\tpop eax");
+                asm.WriteLine("\tsub [" + variable + "], eax");
             }
             else if (Contenido == "*=")
             {
                 match("*=");
                 Expresion();
                 asm.WriteLine("\tpop eax");
+                asm.WriteLine("\tmov ebx, " + "[" + variable + "]");
+                asm.WriteLine("\tmul ebx");
+                asm.WriteLine("\txor ebx,ebx");
+                asm.WriteLine("\tmov dword [" + variable + "], eax");
+
             }
             else if (Contenido == "/=")
             {
                 match("/=");
                 Expresion();
                 asm.WriteLine("\tpop eax");
+                asm.WriteLine("\tmov ecx, eax");
+                asm.WriteLine("\tmov eax, " + "[" + variable + "]");
+                asm.WriteLine("\txor edx,edx");
+                asm.WriteLine("\tdiv ecx");
+                asm.WriteLine("\tmov dword [" + variable + "], eax");
+
+
             }
             else if (Contenido == "%=")
             {
                 match("%=");
                 Expresion();
                 asm.WriteLine("\tpop eax");
+                asm.WriteLine("\tmov ecx, eax");
+                asm.WriteLine("\tmov eax, " + "[" + variable + "]");
+                asm.WriteLine("\txor edx,edx");
+                asm.WriteLine("\tdiv ecx");
+                asm.WriteLine("\tmov dword [" + variable + "], edx");
+
             }
             else if (Contenido == "=")
             {
@@ -247,6 +275,7 @@ namespace Ensamblador
                         match("ReadLine");
                         match("(");
                         match(")");
+
 
                     }
                     else if (Contenido == "Read")
@@ -265,11 +294,11 @@ namespace Ensamblador
             }
             v.valor = nuevoValor;
             //asm.WriteLine("\tpush");
-            
+
             //log.WriteLine(variable + " = " + nuevoValor);
             asm.WriteLine("; Termina asignacion a " + variable);
         }
-        
+
         //If -> if (Condicion) bloqueInstrucciones | instruccion
         //     (else bloqueInstrucciones | instruccion)?
         private void If()
@@ -331,8 +360,8 @@ namespace Ensamblador
         private void While()
         {
             asm.WriteLine("; while " + ++cWhiles);
-            string etiquetaIni = "_whileIni" + cWhiles; 
-            string etiquetaFin = "_whileFin" + cWhiles; 
+            string etiquetaIni = "_whileIni" + cWhiles;
+            string etiquetaFin = "_whileFin" + cWhiles;
             match("while");
             match("(");
             asm.WriteLine(etiquetaIni + ":");
@@ -346,7 +375,7 @@ namespace Ensamblador
             {
                 Instruccion();
             }
-            asm.WriteLine("jmp "+etiquetaIni);
+            asm.WriteLine("\tjmp " + etiquetaIni);
             asm.WriteLine(etiquetaFin + ":");
         }
         //Do -> do 
@@ -411,17 +440,31 @@ namespace Ensamblador
             {
                 match("WriteLine");
                 asm.Write("\tPRINT_STRING ");
+                tem = cadena_identificador(tem);
+                tem = tem.Trim('"');
+                asm.WriteLine("msg" + cCadena);
+                msg.Add(new Mensaje(tem, "msg" + cCadena, true));
+
             }
             else
             {
                 match("Write");
+                asm.Write("\tPRINT_STRING ");
+                tem = cadena_identificador(tem);
+                tem = tem.Trim('"');
+                asm.WriteLine("msg" + cCadena);
+                msg.Add(new Mensaje(tem, "msg" + cCadena, false));
             }
+            cCadena++;
+
+        }
+        private string cadena_identificador(String temp)
+        {
             match("(");
             if (Clasificacion == Tipos.Cadena)
             {
-                tem = Contenido;
+                temp = Contenido.Trim('"');
                 match(Tipos.Cadena);
-                
 
                 if (Contenido == "+")
                 {
@@ -429,37 +472,22 @@ namespace Ensamblador
 
                 }
 
-                else
-                {
-                    if (Contenido == "+")
-                    {
-                        listaConcatenacion();
-                    }
-                }
-                asm.WriteLine("msg" + cCadena);
-
-                tem = tem.Replace('"',comillas);
-                msg.Add(new Mensaje(tem,"msg" + cCadena));
-                cCadena++;
             }
             else
             {
+                temp = Contenido;
                 match(Tipos.Identificador);
+
                 if (Contenido == "+")
                 {
                     listaConcatenacion();
                 }
-                else
-                {
-                    if (Contenido == "+")
-                    {
-                        listaConcatenacion();
-
-                    }
-                }
+                
             }
             match(")");
             match(";");
+            return temp;
+
         }
         private void listaConcatenacion()
         {
@@ -496,7 +524,7 @@ namespace Ensamblador
             //asm.WriteLine("\txor ebx, ebx");
             //asm.WriteLine("\tint 0x80");
             asm.WriteLine("\txor eax, eax");
-            asm.WriteLine("\t ret");
+            asm.WriteLine("\tret");
         }
         //Main      -> static void Main(string[] args) BloqueInstrucciones 
         private void Main()
@@ -528,7 +556,7 @@ namespace Ensamblador
                 string operador = Contenido;
                 match(Tipos.OpTermino);
                 Termino();
-                  asm.WriteLine("\tpop ebx");
+                asm.WriteLine("\tpop ebx");
                 asm.WriteLine("\tpop eax");
                 switch (operador)
                 {
@@ -572,7 +600,7 @@ namespace Ensamblador
                     case "%":
                         asm.WriteLine("\tdiv ebx");
                         asm.WriteLine("\tpush edx");
-                        break;;
+                        break; ;
                 }
             }
         }
@@ -581,18 +609,18 @@ namespace Ensamblador
         {
             if (Clasificacion == Tipos.Numero)
             {
-               asm.WriteLine("\tmov eax, " + Contenido);
+                asm.WriteLine("\tmov eax, " + Contenido);
                 asm.WriteLine("\tpush eax");
                 match(Tipos.Numero);
             }
             else if (Clasificacion == Tipos.Identificador)
             {
-               var v = listaVariables.Find(delegate (Variable x) { return x.nombre == Contenido; });
-                asm.WriteLine("\tmov eax, " + Contenido);
+                var v = listaVariables.Find(delegate (Variable x) { return x.nombre == Contenido; });
+                asm.WriteLine("\tmov eax, " + "[" + Contenido + "]");
                 asm.WriteLine("\tpush eax");
                 match(Tipos.Identificador);
             }
-             else
+            else
             {
                 match("(");
                 Expresion();
