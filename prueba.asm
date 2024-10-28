@@ -7,34 +7,19 @@
 %include 'io.inc'
 
 segment .text
+	extern scanf
 	global main
 
 main:
-;for 1
-;Asignacion a i
-	mov eax, 0
-	push eax
-	pop eax
-	mov dword [i], eax
-; Termina asignacion a i
-_forIni1:
-	mov eax, [i]
-	push eax
-	mov eax, 5
-	push eax
-	pop eax
-	pop ebx
-	cmp eax, ebx
-	jl _forFin1
-;Asignacion a i
-	inc dword [i]
-; Termina asignacion a i
-	PRINT_STRING msg0
-	jmp _forIni1
-_forFin1:
+;Asignacion a a
+push a
+push format
+call scanf
+; Termina asignacion a a
 	xor eax, eax
 	ret
 
 segment .data
-	i dd 0
-	msg0 db 'Hello World!',10 ,0
+
+format db "%d", 0
+	a dd 0

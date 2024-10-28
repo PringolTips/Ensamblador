@@ -13,3 +13,18 @@ C:\Lenguajes y Automatas\Ensamblador\obj\Debug\net8.0\refint\Ensamblador.dll
 C:\Lenguajes y Automatas\Ensamblador\obj\Debug\net8.0\Ensamblador.pdb
 C:\Lenguajes y Automatas\Ensamblador\obj\Debug\net8.0\Ensamblador.genruntimeconfig.cache
 C:\Lenguajes y Automatas\Ensamblador\obj\Debug\net8.0\ref\Ensamblador.dll
+C:\Users\Cristian\Documents\Semestre 5\Lenguajes y automatas ll\Ensamblador\bin\Debug\net8.0\Ensamblador.exe
+C:\Users\Cristian\Documents\Semestre 5\Lenguajes y automatas ll\Ensamblador\bin\Debug\net8.0\Ensamblador.deps.json
+C:\Users\Cristian\Documents\Semestre 5\Lenguajes y automatas ll\Ensamblador\bin\Debug\net8.0\Ensamblador.runtimeconfig.json
+C:\Users\Cristian\Documents\Semestre 5\Lenguajes y automatas ll\Ensamblador\bin\Debug\net8.0\Ensamblador.dll
+C:\Users\Cristian\Documents\Semestre 5\Lenguajes y automatas ll\Ensamblador\bin\Debug\net8.0\Ensamblador.pdb
+C:\Users\Cristian\Documents\Semestre 5\Lenguajes y automatas ll\Ensamblador\obj\Debug\net8.0\Ensamblador.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Cristian\Documents\Semestre 5\Lenguajes y automatas ll\Ensamblador\obj\Debug\net8.0\Ensamblador.AssemblyInfoInputs.cache
+C:\Users\Cristian\Documents\Semestre 5\Lenguajes y automatas ll\Ensamblador\obj\Debug\net8.0\Ensamblador.AssemblyInfo.cs
+C:\Users\Cristian\Documents\Semestre 5\Lenguajes y automatas ll\Ensamblador\obj\Debug\net8.0\Ensamblador.csproj.CoreCompileInputs.cache
+C:\Users\Cristian\Documents\Semestre 5\Lenguajes y automatas ll\Ensamblador\obj\Debug\net8.0\Ensamblador.sourcelink.json
+C:\Users\Cristian\Documents\Semestre 5\Lenguajes y automatas ll\Ensamblador\obj\Debug\net8.0\Ensamblador.dll
+C:\Users\Cristian\Documents\Semestre 5\Lenguajes y automatas ll\Ensamblador\obj\Debug\net8.0\refint\Ensamblador.dll
+C:\Users\Cristian\Documents\Semestre 5\Lenguajes y automatas ll\Ensamblador\obj\Debug\net8.0\Ensamblador.pdb
+C:\Users\Cristian\Documents\Semestre 5\Lenguajes y automatas ll\Ensamblador\obj\Debug\net8.0\Ensamblador.genruntimeconfig.cache
+C:\Users\Cristian\Documents\Semestre 5\Lenguajes y automatas ll\Ensamblador\obj\Debug\net8.0\ref\Ensamblador.dll

@@ -48,6 +48,7 @@ namespace Ensamblador
         {
             log.WriteLine("Lista de variables");
             asm.WriteLine("\nsegment .data");
+            asm.WriteLine("\nformat db " + '"' + "%d" + '"' + ", 0");
             foreach (Variable v in listaVariables)
             {
                 log.WriteLine(v.nombre + " (" + v.tipo + ") = " + v.valor);
@@ -275,14 +276,18 @@ namespace Ensamblador
                         match("ReadLine");
                         match("(");
                         match(")");
-
-
+                        asm.WriteLine("push " + variable);
+                        asm.WriteLine("push format");
+                        asm.WriteLine("call scanf");
                     }
                     else if (Contenido == "Read")
                     {
                         match("Read");
                         match("(");
                         match(")");
+                        asm.WriteLine("push " + variable);
+                        asm.WriteLine("push format");
+                        asm.WriteLine("call scanf");
                     }
                 }
                 else
@@ -537,6 +542,7 @@ namespace Ensamblador
         {
             asm.WriteLine("%include 'io.inc'");
             asm.WriteLine("\nsegment .text");
+            asm.WriteLine("\textern scanf");
             asm.WriteLine("\tglobal main");
             asm.WriteLine("\nmain:");
         }

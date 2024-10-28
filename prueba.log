@@ -2,7 +2,7 @@ Analizador Lexico
 Autores: 
 Moya Arreola Cristian
 Martinez Prieto Angel Josue
-Fecha:27/10/2024 10:54:04 p. m.
+Fecha:28/10/2024 09:49:47 a. m.
 static = Identificador
 Analisis Sintactico
 void = Identificador
@@ -15,31 +15,17 @@ args = Identificador
 ) = Caracter
 { = Inicio
 int = TipoDato
-i = Identificador
+a = Identificador
 ; = FinSentencia
-for = Ciclo
-( = Caracter
-i = Identificador
+a = Identificador
 = = Asignacion
-0 = Numero
-; = FinSentencia
-i = Identificador
-< = OpRelacional
-5 = Numero
-; = FinSentencia
-i = Identificador
-++ = IncTermino
-) = Caracter
-{ = Inicio
 Console = Identificador
 . = Caracter
-WriteLine = Identificador
+ReadLine = Identificador
 ( = Caracter
-"Hello World!" = Cadena
 ) = Caracter
 ; = FinSentencia
-} = Fin
 } = Fin
 ￿ = Caracter
 Lista de variables
-i (Int) = 1
+a (Int) = 0
