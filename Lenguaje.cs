@@ -23,7 +23,7 @@ namespace Ensamblador
         private List<Variable> listaVariables;
         private List<Mensaje> msg;
 
-        private int contIf, contDo, cWhiles, cCadena;
+        private int contIf, contDo, cWhiles, cCadena, contFor;
         // private Variable.TipoD tipoDatoExpresion;
 
         public Lenguaje(String nombre = "prueba.cpp")
@@ -344,15 +344,23 @@ namespace Ensamblador
             asm.WriteLine("\tcmp eax, ebx");
             switch (operador)
             {
-                case ">": break;
-                case ">=": break;
-                case "<": break;
-                case "<=": break;
+                case ">":
+                    asm.WriteLine("\tjg " + etiqueta);
+                    break;
+                case ">=":
+                    asm.WriteLine("\tjge " + etiqueta);
+                    break;
+                case "<":
+                    asm.WriteLine("\tjl " + etiqueta);
+                    break;
+                case "<=":
+                    asm.WriteLine("\tjle " + etiqueta);
+                    break;
                 case "==":
-                    asm.WriteLine("\tjne " + etiqueta);
+                    asm.WriteLine("\tje " + etiqueta);
                     break;
                 default:
-                    asm.WriteLine("\tje " + etiqueta);
+                    asm.WriteLine("\tjne " + etiqueta);
                     break;
             }
         }
@@ -405,14 +413,29 @@ namespace Ensamblador
         //       BloqueInstrucciones | Intruccion 
         private void For()
         {
+            asm.WriteLine(";for " + ++contFor);
+            string etiquetaIni = "_forIni" + contFor;
+            string etiquetaFin = "_forFin" + contFor;
+            
             match("for");
             match("(");
             Asignacion();
+            asm.WriteLine(etiquetaIni + ":");
             match(";");
-            Condicion("");
+            Condicion(etiquetaFin);
             match(";");
             Asignacion();
             match(")");
+            if (Contenido == "{")
+            {
+                BloqueInstrucciones();
+            }
+            else
+            {
+                Instruccion();
+            }
+            asm.WriteLine("\tjmp " + etiquetaIni);
+            asm.WriteLine(etiquetaFin + ":");
         }
         //Incremento -> Identificador ++ | --
         private void Incremento()
@@ -482,7 +505,7 @@ namespace Ensamblador
                 {
                     listaConcatenacion();
                 }
-                
+
             }
             match(")");
             match(";");
@@ -519,10 +542,6 @@ namespace Ensamblador
         }
         private void asm_endMain()
         {
-            //asm.WriteLine("\tadd esp, 4\n");
-            //asm.WriteLine("\tmov eax, 1");
-            //asm.WriteLine("\txor ebx, ebx");
-            //asm.WriteLine("\tint 0x80");
             asm.WriteLine("\txor eax, eax");
             asm.WriteLine("\tret");
         }
@@ -576,6 +595,7 @@ namespace Ensamblador
         {
             Factor();
             PorFactor();
+
         }
         //PorFactor -> (OperadorFactor Factor)?
         private void PorFactor()

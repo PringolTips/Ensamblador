@@ -10,26 +10,31 @@ segment .text
 	global main
 
 main:
-	mov eax, 6
-	push eax
-	pop eax
-	mov dword [i], eax
+;for 1
 ;Asignacion a i
-	mov eax, 7
-	push eax
-	mov eax, 4
-	push eax
-	pop ebx
-	pop eax
-	add eax, ebx
+	mov eax, 0
 	push eax
 	pop eax
 	mov dword [i], eax
 ; Termina asignacion a i
+_forIni1:
+	mov eax, [i]
+	push eax
+	mov eax, 5
+	push eax
+	pop eax
+	pop ebx
+	cmp eax, ebx
+	jl _forFin1
+;Asignacion a i
+	inc dword [i]
+; Termina asignacion a i
 	PRINT_STRING msg0
+	jmp _forIni1
+_forFin1:
 	xor eax, eax
 	ret
 
 segment .data
 	i dd 0
-	msg0 db 'Hola',10 ,0
+	msg0 db 'Hello World!',10 ,0
