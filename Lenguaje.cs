@@ -209,7 +209,7 @@ namespace Ensamblador
             else if (Contenido == "--")
             {
                 match("--");
-                asm.WriteLine("\tdec " + variable);
+                asm.WriteLine("\tdec dword [" + variable + "]");
                 nuevoValor--;
             }
             else if (Contenido == "+=")
@@ -360,22 +360,22 @@ namespace Ensamblador
             switch (operador)
             {
                 case ">":
-                    asm.WriteLine("\tjg " + etiqueta);
-                    break;
-                case ">=":
                     asm.WriteLine("\tjge " + etiqueta);
                     break;
-                case "<":
-                    asm.WriteLine("\tjl " + etiqueta);
+                case ">=":
+                    asm.WriteLine("\tjg " + etiqueta);
                     break;
-                case "<=":
+                case "<":
                     asm.WriteLine("\tjle " + etiqueta);
                     break;
+                case "<=":
+                    asm.WriteLine("\tjl " + etiqueta);
+                    break;
                 case "==":
-                    asm.WriteLine("\tje " + etiqueta);
+                    asm.WriteLine("\tjne " + etiqueta);
                     break;
                 default:
-                    asm.WriteLine("\tjne " + etiqueta);
+                    asm.WriteLine("\tje " + etiqueta);
                     break;
             }
         }
