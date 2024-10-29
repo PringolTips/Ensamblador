@@ -10,7 +10,7 @@ using System.Threading.Tasks;
     El proyecto genera código ASM en: nasm o masm o .... excepto emu8086
     1. Completar la asignación                                              -listo
     2. Console.Write & Console.WriteLine                                    -concatenacion
-    3. Console.Read & Console.ReadLine /*                                   -pendiente    
+    3. Console.Read & Console.ReadLine /*                                   -Listo  
     4. Considerar el else en el if --  
     5. Programar el while /*
     6. Programar el for--
@@ -309,11 +309,16 @@ namespace Ensamblador
         private void If()
         {
             asm.WriteLine("; if " + contIf);
-            string etiqueta = "_if" + contIf++;
+            string etiquetaElse = "_else" + contIf;   
+            string etiquetaFinIf = "_finIf" + contIf; 
+            contIf++;
+
             match("if");
             match("(");
-            Condicion(etiqueta);
+            Condicion(etiquetaElse); 
             match(")");
+
+            
             if (Contenido == "{")
             {
                 BloqueInstrucciones();
@@ -322,6 +327,11 @@ namespace Ensamblador
             {
                 Instruccion();
             }
+
+            asm.WriteLine("\tjmp " + etiquetaFinIf); 
+            asm.WriteLine(etiquetaElse + ":");       
+
+            
             if (Contenido == "else")
             {
                 match("else");
@@ -334,8 +344,8 @@ namespace Ensamblador
                     Instruccion();
                 }
             }
-            asm.WriteLine(etiqueta + ":");
-            //Generar etiqueta
+
+            asm.WriteLine(etiquetaFinIf + ":"); 
         }
         //Condicion -> Expresion operadorRelacional Expresion
         private void Condicion(string etiqueta)
@@ -421,7 +431,7 @@ namespace Ensamblador
             asm.WriteLine(";for " + ++contFor);
             string etiquetaIni = "_forIni" + contFor;
             string etiquetaFin = "_forFin" + contFor;
-            
+
             match("for");
             match("(");
             Asignacion();
