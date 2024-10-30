@@ -10,10 +10,10 @@ using System.Threading.Tasks;
     El proyecto genera código ASM en: nasm o masm o .... excepto emu8086
     1. Completar la asignación                                              -listo
     2. Console.Write & Console.WriteLine                                    -concatenacion
-    3. Console.Read & Console.ReadLine /*                                   -Listo  
-    4. Considerar el else en el if --  
-    5. Programar el while /*
-    6. Programar el for--
+    3. Console.Read & Console.ReadLine                                      -Listo  
+    4. Considerar el else en el if --                                       - Listo
+    5. Programar el while                                                   - Listo
+    6. Programar el for                                                     - Listo
 */
 //Estoy conectado
 namespace Ensamblador
@@ -219,7 +219,6 @@ namespace Ensamblador
                 asm.WriteLine("\tpop eax");
                 asm.WriteLine("\tadd [" + variable + "], eax");
 
-
             }
             else if (Contenido == "-=")
             {
@@ -249,7 +248,6 @@ namespace Ensamblador
                 asm.WriteLine("\txor edx,edx");
                 asm.WriteLine("\tdiv ecx");
                 asm.WriteLine("\tmov dword [" + variable + "], eax");
-
 
             }
             else if (Contenido == "%=")
@@ -303,22 +301,20 @@ namespace Ensamblador
             //log.WriteLine(variable + " = " + nuevoValor);
             asm.WriteLine("; Termina asignacion a " + variable);
         }
-
         //If -> if (Condicion) bloqueInstrucciones | instruccion
         //     (else bloqueInstrucciones | instruccion)?
         private void If()
         {
             asm.WriteLine("; if " + contIf);
-            string etiquetaElse = "_else" + contIf;   
-            string etiquetaFinIf = "_finIf" + contIf; 
+            string etiquetaElse = "_else" + contIf;
+            string etiquetaFinIf = "_finIf" + contIf;
             contIf++;
 
             match("if");
             match("(");
-            Condicion(etiquetaElse); 
+            Condicion(etiquetaElse);
             match(")");
 
-            
             if (Contenido == "{")
             {
                 BloqueInstrucciones();
@@ -327,11 +323,9 @@ namespace Ensamblador
             {
                 Instruccion();
             }
+            asm.WriteLine("\tjmp " + etiquetaFinIf);
+            asm.WriteLine(etiquetaElse + ":");
 
-            asm.WriteLine("\tjmp " + etiquetaFinIf); 
-            asm.WriteLine(etiquetaElse + ":");       
-
-            
             if (Contenido == "else")
             {
                 match("else");
@@ -344,8 +338,7 @@ namespace Ensamblador
                     Instruccion();
                 }
             }
-
-            asm.WriteLine(etiquetaFinIf + ":"); 
+            asm.WriteLine(etiquetaFinIf + ":");
         }
         //Condicion -> Expresion operadorRelacional Expresion
         private void Condicion(string etiqueta)
@@ -406,10 +399,13 @@ namespace Ensamblador
         //      while(Condicion);
         private void Do()
         {
-            asm.WriteLine("do " + contDo);
-            string etiqueta = "_do" + contDo++;
-            asm.WriteLine(etiqueta + ";");
+            asm.WriteLine("; do-while " + contDo);
+            string etiquetaIni = "_doInicio" + contDo;
+            string etiquetaFin = "_doFin" + contDo++;
+
+            asm.WriteLine(etiquetaIni + ":");
             match("do");
+
             if (Contenido == "{")
             {
                 BloqueInstrucciones();
@@ -418,9 +414,15 @@ namespace Ensamblador
             {
                 Instruccion();
             }
+
             match("while");
             match("(");
-            Condicion(etiqueta);
+
+            Condicion(etiquetaFin);
+
+            asm.WriteLine("\tjmp " + etiquetaIni); 
+            asm.WriteLine(etiquetaFin + ":"); 
+
             match(")");
             match(";");
         }
@@ -464,7 +466,6 @@ namespace Ensamblador
             {
                 match("--");
             }
-
         }
         //Console -> Console.(WriteLine|Write) (cadena); |
         //           Console.(Read | ReadLine) ();
@@ -494,7 +495,6 @@ namespace Ensamblador
                 msg.Add(new Mensaje(tem, "msg" + cCadena, false));
             }
             cCadena++;
-
         }
         private string cadena_identificador(String temp)
         {
@@ -509,7 +509,6 @@ namespace Ensamblador
                     listaConcatenacion();
 
                 }
-
             }
             else
             {
@@ -520,12 +519,10 @@ namespace Ensamblador
                 {
                     listaConcatenacion();
                 }
-
             }
             match(")");
             match(";");
             return temp;
-
         }
         private void listaConcatenacion()
         {
@@ -611,7 +608,6 @@ namespace Ensamblador
         {
             Factor();
             PorFactor();
-
         }
         //PorFactor -> (OperadorFactor Factor)?
         private void PorFactor()

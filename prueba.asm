@@ -11,29 +11,26 @@ segment .text
 	global main
 
 main:
-	mov eax, 5
+	mov eax, 12
 	push eax
 	pop eax
 	mov dword [a], eax
+; do-while 1
+_doInicio1:
+	PRINT_STRING msg0
 ;Asignacion a a
-push a
-push format
-call scanf
+	dec dword [a]
 ; Termina asignacion a a
-; if 1
 	mov eax, [a]
 	push eax
-	mov eax, 5
+	mov eax, 11
 	push eax
 	pop eax
 	pop ebx
 	cmp eax, ebx
-	jle _else1
-	PRINT_STRING msg0
-	jmp _finIf1
-_else1:
-	PRINT_STRING msg1
-_finIf1:
+	jne _doFin1
+	jmp _doInicio1
+_doFin1:
 	xor eax, eax
 	ret
 
@@ -42,4 +39,3 @@ segment .data
 format db "%d", 0
 	a dd 0
 	msg0 db 'Hello World!',10 ,0
-	msg1 db 'Adios',10 ,0

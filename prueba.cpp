@@ -1,13 +1,10 @@
 static void Main(string[] args)
 { 
-   int a=5;
-   a = Console.ReadLine();
-   if(a<=5)
+   int a=12;
+   do
    {
       Console.WriteLine("Hello World!");
+      a--;
    }
-   else
-   {
-      Console.WriteLine("Adios");
-   }
+   while(a == 11);
 }
