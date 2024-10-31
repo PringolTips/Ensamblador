@@ -67,11 +67,9 @@ namespace Ensamblador
             }
             foreach (Mensaje v in msg)
             {
-                if (v.Salto == true)
-                    asm.WriteLine("\t" + v.nombre + " db '" + v.Contenido + "',10 ,0");
-                else
                     asm.WriteLine("\t" + v.nombre + " db '" + v.Contenido + "' ,0");
             }
+            asm.WriteLine("\tsalto db "+"''"+", 10, 0");
         }
         //Programa  -> Librerias? Variables? Main
         public void Programa()
@@ -420,8 +418,8 @@ namespace Ensamblador
 
             Condicion(etiquetaFin);
 
-            asm.WriteLine("\tjmp " + etiquetaIni); 
-            asm.WriteLine(etiquetaFin + ":"); 
+            asm.WriteLine("\tjmp " + etiquetaIni);
+            asm.WriteLine(etiquetaFin + ":");
 
             match(")");
             match(";");
@@ -471,74 +469,79 @@ namespace Ensamblador
         //           Console.(Read | ReadLine) ();
         private void console()
         {
-            string tem = "";
-            char comillas = '"';
+            bool salto = false;
             match("Console");
             match(".");
             if (Contenido == "WriteLine")
             {
                 match("WriteLine");
-                asm.Write("\tPRINT_STRING ");
-                tem = cadena_identificador(tem);
-                tem = tem.Trim('"');
-                asm.WriteLine("msg" + cCadena);
-                msg.Add(new Mensaje(tem, "msg" + cCadena, true));
-
+                salto = true;
+                
             }
             else
             {
                 match("Write");
-                asm.Write("\tPRINT_STRING ");
-                tem = cadena_identificador(tem);
-                tem = tem.Trim('"');
-                asm.WriteLine("msg" + cCadena);
-                msg.Add(new Mensaje(tem, "msg" + cCadena, false));
             }
-            cCadena++;
-        }
-        private string cadena_identificador(String temp)
-        {
+
+            string temp = "";
             match("(");
             if (Clasificacion == Tipos.Cadena)
             {
+                
                 temp = Contenido.Trim('"');
+                msg.Add(new Mensaje(temp, "msg" + cCadena));
                 match(Tipos.Cadena);
-
-                if (Contenido == "+")
-                {
-                    listaConcatenacion();
-
-                }
+                asm.Write("\tPRINT_STRING ");
+                asm.WriteLine("msg" + cCadena);
+                cCadena++;
             }
             else
             {
-                temp = Contenido;
+                asm.WriteLine("\tmov eax, [" + Contenido + "]");
+                asm.WriteLine("\tpush eax");
+                asm.WriteLine("\tpush format");
+                asm.WriteLine("\tcall printf");
                 match(Tipos.Identificador);
-
-                if (Contenido == "+")
-                {
-                    listaConcatenacion();
-                }
+                
+            }
+            if (Contenido == "+")
+            {
+                listaConcatenacion();
             }
             match(")");
             match(";");
-            return temp;
+            if(salto == true)
+            {
+                asm.WriteLine("\tPRINT_STRING salto");
+            }
         }
         private void listaConcatenacion()
         {
+            string temp = "";
             match("+");
+
             if (Clasificacion == Tipos.Identificador)
             {
                 if (!ExisteVariable(Contenido))
                 {
                     throw new Error("Semantico: la variable no existe: " + Contenido, log, linea);
                 }
-                var v = listaVariables.Find(variable => variable.nombre == Contenido);
+
+                var variable = listaVariables.Find(v => v.nombre == Contenido);
+                asm.WriteLine("\tmov eax, [" + variable.nombre + "]");
+                asm.WriteLine("\tpush eax");
+                asm.WriteLine("\tpush format");
+                asm.WriteLine("\tcall printf");
                 match(Tipos.Identificador);
             }
-            if (Clasificacion == Tipos.Cadena)
+            else if (Clasificacion == Tipos.Cadena)
             {
+                temp = Contenido.Trim('"');
+                msg.Add(new Mensaje(temp, "msg" + cCadena));
                 match(Tipos.Cadena);
+                asm.Write("\tPRINT_STRING ");
+                asm.WriteLine("msg" + cCadena);
+                cCadena++;
             }
             if (Contenido == "+")
             {
@@ -550,6 +553,7 @@ namespace Ensamblador
             asm.WriteLine("%include 'io.inc'");
             asm.WriteLine("\nsegment .text");
             asm.WriteLine("\textern scanf");
+            asm.WriteLine("\textern printf");
             asm.WriteLine("\tglobal main");
             asm.WriteLine("\nmain:");
         }
