@@ -196,19 +196,16 @@ namespace Ensamblador
             match(Tipos.Identificador);
             asm.WriteLine(";Asignacion a " + variable);
             var v = listaVariables.Find(delegate (Variable x) { return x.nombre == variable; });
-            float nuevoValor = v.valor;
 
             if (Contenido == "++")
             {
                 match("++");
                 asm.WriteLine("\tinc dword [" + variable + "]");
-                nuevoValor++;
             }
             else if (Contenido == "--")
             {
                 match("--");
                 asm.WriteLine("\tdec dword [" + variable + "]");
-                nuevoValor--;
             }
             else if (Contenido == "+=")
             {
@@ -293,7 +290,6 @@ namespace Ensamblador
                     asm.WriteLine("\tmov dword [" + variable + "], eax");
                 }
             }
-            v.valor = nuevoValor;
             //asm.WriteLine("\tpush");
 
             //log.WriteLine(variable + " = " + nuevoValor);
@@ -431,6 +427,7 @@ namespace Ensamblador
             asm.WriteLine(";for " + ++contFor);
             string etiquetaIni = "_forIni" + contFor;
             string etiquetaFin = "_forFin" + contFor;
+            String inc_dec = "";
 
             match("for");
             match("(");
@@ -439,7 +436,7 @@ namespace Ensamblador
             match(";");
             Condicion(etiquetaFin);
             match(";");
-            Asignacion();
+            inc_dec = Incremento();
             match(")");
             if (Contenido == "{")
             {
@@ -449,21 +446,28 @@ namespace Ensamblador
             {
                 Instruccion();
             }
+            asm.WriteLine(inc_dec);
             asm.WriteLine("\tjmp " + etiquetaIni);
             asm.WriteLine(etiquetaFin + ":");
         }
         //Incremento -> Identificador ++ | --
-        private void Incremento()
+        private string Incremento()
         {
+            string variable = Contenido;
+            string tem = "";
+            var v = listaVariables.Find(delegate (Variable x) { return x.nombre == variable; });
             match(Tipos.Identificador);
             if (Contenido == "++")
             {
                 match("++");
+                tem = "\tinc dword [" + variable + "]";
             }
             else
             {
                 match("--");
+                tem = "\tdec dword [" + variable + "]";
             }
+            return tem;
         }
         //Console -> Console.(WriteLine|Write) (cadena); |
         //           Console.(Read | ReadLine) ();
@@ -522,10 +526,6 @@ namespace Ensamblador
 
             if (Clasificacion == Tipos.Identificador)
             {
-                if (!ExisteVariable(Contenido))
-                {
-                    throw new Error("Semantico: la variable no existe: " + Contenido, log, linea);
-                }
 
                 var variable = listaVariables.Find(v => v.nombre == Contenido);
                 asm.WriteLine("\tmov eax, [" + variable.nombre + "]");
@@ -634,7 +634,17 @@ namespace Ensamblador
                         asm.WriteLine("\tpush eax");
                         break;
                     case "%":
-                        asm.WriteLine("\tdiv ebx");
+                        /*
+                        asm.WriteLine("\tpop eax");
+                        
+                        asm.WriteLine("\tmov eax, " + "[" + variable + "]");
+                        asm.WriteLine("\txor edx,edx");
+                        asm.WriteLine("\tdiv ecx");
+                        asm.WriteLine("\tmov dword [" + variable + "], edx");
+                        */
+                        asm.WriteLine("\tmov ecx, ebx");
+                        asm.WriteLine("\txor edx,edx");
+                        asm.WriteLine("\tdiv ecx");
                         asm.WriteLine("\tpush edx");
                         break; ;
                 }
