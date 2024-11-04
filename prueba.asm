@@ -25,7 +25,6 @@ main:
 push altura
 push format
 call scanf
-; Termina asignacion a altura
 	mov eax, 3
 	push eax
 	mov eax, [altura]
@@ -62,7 +61,6 @@ call scanf
 	mov dword [x], eax
 ;Asignacion a x
 	dec dword [x]
-; Termina asignacion a x
 ;Asignacion a x
 	mov eax, [altura]
 	push eax
@@ -74,7 +72,6 @@ call scanf
 	push eax
 	pop eax
 	add [x], eax
-; Termina asignacion a x
 ;Asignacion a x
 	mov eax, 2
 	push eax
@@ -83,7 +80,6 @@ call scanf
 	mul ebx
 	xor ebx,ebx
 	mov dword [x], eax
-; Termina asignacion a x
 	mov eax, 1
 	push eax
 	pop eax
@@ -94,7 +90,6 @@ call scanf
 	push eax
 	pop eax
 	mov dword [i], eax
-; Termina asignacion a i
 _forIni1:
 	mov eax, [k]
 	push eax
@@ -104,13 +99,13 @@ _forIni1:
 	pop ebx
 	cmp eax, ebx
 	jl _forFin1
+;Asignacion a k
 ;for 2
 ;Asignacion a j
 	mov eax, 1
 	push eax
 	pop eax
 	mov dword [j], eax
-; Termina asignacion a j
 _forIni2:
 	mov eax, [j]
 	push eax
@@ -120,6 +115,7 @@ _forIni2:
 	pop ebx
 	cmp eax, ebx
 	jl _forFin2
+;Asignacion a j
 ; if 1
 	mov eax, [j]
 	push eax
@@ -155,13 +151,11 @@ _forFin1:
 	push eax
 	pop eax
 	mov dword [i], eax
-; Termina asignacion a i
 ; do-while 1
 _doInicio1:
 	PRINT_STRING msg4
 ;Asignacion a i
 	inc dword [i]
-; Termina asignacion a i
 	mov eax, [i]
 	push eax
 	mov eax, [altura]
@@ -180,7 +174,6 @@ _doFin1:
 	push eax
 	pop eax
 	mov dword [i], eax
-; Termina asignacion a i
 _forIni3:
 	mov eax, [i]
 	push eax
@@ -190,12 +183,12 @@ _forIni3:
 	pop ebx
 	cmp eax, ebx
 	jl _forFin3
+;Asignacion a i
 ;Asignacion a j
 	mov eax, 1
 	push eax
 	pop eax
 	mov dword [j], eax
-; Termina asignacion a j
 ; while 1
 _whileIni1:
 	mov eax, [j]
@@ -213,7 +206,6 @@ _whileIni1:
 	call printf
 ;Asignacion a j
 	inc dword [j]
-; Termina asignacion a j
 	jmp _whileIni1
 _whileFin1:
 	PRINT_STRING msg7
@@ -226,13 +218,11 @@ _forFin3:
 	push eax
 	pop eax
 	mov dword [i], eax
-; Termina asignacion a i
 ; do-while 2
 _doInicio2:
 	PRINT_STRING msg8
 ;Asignacion a i
 	inc dword [i]
-; Termina asignacion a i
 	mov eax, [i]
 	push eax
 	mov eax, [altura]
